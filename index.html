@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArenaLive - Sports Hub</title>
+    <!-- Google Fonts & FontAwesome icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ff4757;
+            --primary-football: #00ff87;
+            --primary-cricket: #f4b41a;
+            --bg-dark: #07080c;
+            --card-bg: rgba(0, 0, 0, 0.75);
+            --border-glow: rgba(255, 255, 255, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            min-height: 100vh;
+            /* ඔබ ලබාදුන් පසුබිම් රූපය (sports-bg.jpg) */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.88)), url('sports-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Header */
+        header {
+            background: rgba(7, 8, 12, 0.92);
+            backdrop-filter: blur(15px);
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--primary-football);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Container Section */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Welcome Banner */
+        .hero-banner {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 35px;
+            text-align: center;
+            border: 1px solid var(--border-glow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-banner h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .hero-banner p {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Live Badge */
+        .live-badge {
+            background: #ff4757;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* Section Styling */
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .live-scorecard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .live-scorecard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Live Score Card UI on Home */
+        .score-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .score-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .sport-type {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .football-color { color: var(--primary-football); }
+        .cricket-color { color: var(--primary-cricket); }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .watch-btn, .details-btn {
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .watch-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+        }
+
+        .watch-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .details-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .details-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Embedded Iframe Container */
+        .widget-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+
+        /* Timetable Embed Widgets */
+        .sport-iframe {
+            width: 100%;
+            height: 650px;
+            border: none;
+            border-radius: 12px;
+            background: #0d0e12;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-play"></i> Arena<span>Live</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" id="btn-home" onclick="switchTab('home')">
+                <i class="fa-solid fa-house"></i> Home
+            </button>
+            <button class="tab-btn" id="btn-football" onclick="switchTab('football')">
+                <i class="fa-solid fa-circle-dot"></i> Football
+            </button>
+            <button class="tab-btn" id="btn-cricket" onclick="switchTab('cricket')">
+                <i class="fa-solid fa-baseball"></i> Cricket
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. HOME SECTION -->
+        <section id="home-section" class="page-section active">
+            <!-- Welcome Hero Banner -->
+            <div class="hero-banner">
+                <h1>REAL-TIME SPORTS HUB</h1>
+                <p>Enjoy live sports events directly inside the website. Track schedules, matches, and daily timetables automatically without any external page redirections.</p>
+                <div class="live-badge">
+                    <span class="live-dot"></span> System Live & Active
+                </div>
+            </div>
+
+            <!-- Home Dashboard Grid -->
+            <div class="section-title">
+                <i class="fa-solid fa-bolt" style="color: #ff4757;"></i> Daily Match Overview
+            </div>
+
+            <div class="live-scorecard-grid">
+                <!-- Football Home Preview Card -->
+                <div class="score-card">
+                    <div>
+                        <div class="score-card-header">
+                            <span class="sport-type football-color"><i class="fa-solid fa-circle-dot"></i> Football Fixtures</span>
+                            <div class="live-badge" style="background: var(--primary-football); color: #000;"><span class="live-dot" style="background: #000;"></span> Active</div>
+                        </div>
+                        <div style="margin: 15px 0; color: #ccc; font-size: 14px; line-height: 1.6;">
+                            Follow active world leagues, upcoming schedules, and live matches. Click the button below to view the interactive live widget.
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <a href="https://omg10.com/4/9957739" target="_blank" class="watch-btn">
+                            <i class="fa-solid fa-play"></i> Watch Stream
+                        </a>
+                        <button onclick="switchTab('football')" class="details-btn">
+                            <i class="fa-solid fa-calendar-days"></i> Open Scoreboard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cricket Home Preview Card -->
+                <div class="score-card">
+                    <div>
+                        <div class="score-card-header">
+                            <span class="sport-type cricket-color"><i class="fa-solid fa-baseball"></i> Cricket Fixtures</span>
+                            <div class="live-badge" style="background: var(--primary-cricket); color: #000;"><span class="live-dot" style="background: #000;"></span> Active</div>
+                        </div>
+                        <div style="margin: 15px 0; color: #ccc; font-size: 14px; line-height: 1.6;">
+                            Follow current test/T20 international tournaments, standings, and schedules. Click below to load the live scoreboard.
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <a href="https://omg10.com/4/9952229" target="_blank" class="watch-btn">
+                            <i class="fa-solid fa-play"></i> Watch Stream
+                        </a>
+                        <button onclick="switchTab('cricket')" class="details-btn">
+                            <i class="fa-solid fa-calendar-days"></i> Open Scoreboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2. FOOTBALL SECTION -->
+        <section id="football-section" class="page-section">
+            <div class="hero-banner" style="border-color: var(--primary-football);">
+                <h1 style="color: var(--primary-football);">FOOTBALL MATCH CENTRE</h1>
+                <p>Follow live action and timetables. Use the interactive calendar below to view live scores and scheduled fixtures.</p>
+                <a href="https://omg10.com/4/9957739" target="_blank" class="watch-btn" style="display: inline-flex; padding: 14px 40px; border-radius: 30px;">
+                    <i class="fa-solid fa-play" style="margin-right: 8px;"></i> Watch Live Match Stream
+                </a>
+            </div>
+
+            <!-- Embedded Football Timetable and Livescore Widget -->
+            <div class="section-title">
+                <i class="fa-solid fa-calendar-check" style="color: var(--primary-football);"></i> Live Football Scores & Timetable
+            </div>
+            
+            <div class="widget-card">
+                <!-- SportBusy Widget - 100% embed-friendly responsive iframe calendar -->
+                <iframe class="sport-iframe" id="sportbusy-embed" src="https://www.sportbusy.com/embed" loading="lazy" title="Live Football Matches Tracker"></iframe>
+            </div>
+        </section>
+
+
+        <!-- 3. CRICKET SECTION -->
+        <section id="cricket-section" class="page-section">
+            <div class="hero-banner" style="border-color: var(--primary-cricket);">
+                <h1 style="color: var(--primary-cricket);">CRICKET MATCH CENTRE</h1>
+                <p>Catch live T20, ODI, and domestic cricket streams. View the live schedules and scorecards below.</p>
+                <a href="https://omg10.com/4/9952229" target="_blank" class="watch-btn" style="display: inline-flex; padding: 14px 40px; border-radius: 30px; background-color: var(--primary-cricket);">
+                    <i class="fa-solid fa-play" style="margin-right: 8px;"></i> Watch Live Cricket Stream
+                </a>
+            </div>
+
+            <!-- Embedded Cricket Timetable and Livescore Widget -->
+            <div class="section-title">
+                <i class="fa-solid fa-square-poll-vertical" style="color: var(--primary-cricket);"></i> Live Cricket Scores & Timetable
+            </div>
+
+            <div class="widget-card">
+                <!-- Crictimes Embed Widget for Cricket Schedules & Scores -->
+                <iframe class="sport-iframe" src="https://widget.crictimes.org/" loading="lazy" title="Live Cricket Tracker"></iframe>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript for Dynamic Tab Switching -->
+    <script>
+        function switchTab(tabName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Active and Show selected Tab & Section
+            if (tabName === 'home') {
+                document.getElementById('home-section').classList.add('active');
+                document.getElementById('btn-home').classList.add('active');
+            } else if (tabName === 'football') {
+                document.getElementById('football-section').classList.add('active');
+                document.getElementById('btn-football').classList.add('active');
+            } else if (tabName === 'cricket') {
+                document.getElementById('cricket-section').classList.add('active');
+                document.getElementById('btn-cricket').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
